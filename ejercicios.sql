@@ -120,6 +120,8 @@ UPDATE productos SET precio = 1350.00 WHERE nombre = 'Laptop';
 Ejercicio 1: Lugares Turísticos en Chile
 
 Crear una base de datos llamada TurismoChile.
+CREATE DATABASE TurismoChile;
+\c TurismoChile
 
 Crear dos tablas relacionadas:
 
@@ -129,26 +131,83 @@ nombre_lugar (varchar(50), NOT NULL)
 ubicacion (varchar(50), NOT NULL)
 tipo (varchar(30), NOT NULL)
 
+CREATE TABLE lugares_turisticos (
+    id_lugar SERIAL PRIMARY KEY,
+    nombre_lugar VARCHAR(50) NOT NULL,
+    ubicacion VARCHAR(50) NOT NULL,
+    tipo VARCHAR(30) NOT NULL
+);
+
+
 actividades: para listar actividades turísticas disponibles en cada lugar.
 id_actividad (serial, primary key)
 nombre_actividad (varchar(50), NOT NULL)
 id_lugar (integer, references lugares_turisticos(id_lugar))
 
+CREATE TABLE actividades (
+    id_actividad SERIAL PRIMARY KEY,
+    nombre_actividad VARCHAR(50) NOT NULL,
+    id_lugar INTEGER REFERENCES lugares_turisticos(id_lugar)
+);
+
+
 Agregar 5 datos en total, distribuidos entre las dos tablas.
+INSERT INTO lugares_turisticos (nombre_lugar, ubicacion, tipo)
+VALUES
+    ('Parque Nacional Torres del Paine', 'Magallanes', 'Parque Nacional'),
+    ('San Pedro de Atacama', 'Antofagasta', 'Desierto'),
+    ('Valparaíso', 'Valparaíso', 'Ciudad'),
+    ('Isla de Pascua', 'Región de Valparaíso', 'Isla'),
+    ('Lago Llanquihue', 'Los Lagos', 'Lago');
+
+INSERT INTO actividades (nombre_actividad, id_lugar)
+VALUES
+    ('Senderismo', 1),
+    ('Astronomía', 2),
+    ('Recorrido Histórico', 3),
+    ('Buceo', 4),
+    ('Navegación', 5);
+
+
 
 Modificar un dato en alguna de las tablas (puede ser cambiar el nombre de un lugar o actividad).
+UPDATE lugares_turisticos
+SET nombre_lugar = 'Torres del Paine'
+WHERE nombre_lugar = 'Parque Nacional Torres del Paine';
+
 
 Modificar la estructura de alguna tabla (por ejemplo, agregar una nueva columna).
+ALTER TABLE lugares_turisticos
+ADD COLUMN descripcion TEXT;
+
 
 Eliminar un dato de alguna tabla.
+DELETE FROM actividades
+WHERE nombre_actividad = 'Buceo';
+
 
 Realizar una transacción utilizando BEGIN, COMMIT y ROLLBACK:
 Insertar un nuevo lugar y una nueva actividad.
 Si la inserción falla, revertir los cambios.
 
+BEGIN;
+
+INSERT INTO lugares_turisticos (nombre_lugar, ubicacion, tipo)
+VALUES ('Parque Vicente Pérez Rosales', 'Los Lagos', 'Parque Nacional');
+
+INSERT INTO actividades (nombre_actividad, id_lugar)
+VALUES ('Rafting', 6);
+
+ROLLBACK;
+
+
+
 Ejercicio 2: Deportes en Chile
 
 Crear una base de datos llamada DeportesChile.
+CREATE DATABASE DeportesChile;
+\c DeportesChile
+
 Crear dos tablas relacionadas:
 
 deportes: para almacenar los diferentes deportes practicados en Chile.
@@ -156,19 +215,65 @@ id_deporte (serial, primary key)
 nombre_deporte (varchar(50), NOT NULL)
 categoria (varchar(30), NOT NULL)
 
+CREATE TABLE deportes (
+    id_deporte SERIAL PRIMARY KEY,
+    nombre_deporte VARCHAR(50) NOT NULL,
+    categoria VARCHAR(30) NOT NULL
+);
+
 eventos: para listar los eventos deportivos en Chile.
 id_evento (serial, primary key)
 nombre_evento (varchar(50), NOT NULL)
 id_deporte (integer, references deportes(id_deporte))
 
+CREATE TABLE eventos (
+    id_evento SERIAL PRIMARY KEY,
+    nombre_evento VARCHAR(50) NOT NULL,
+    id_deporte INTEGER REFERENCES deportes(id_deporte)
+);
+
+
 Agregar 5 datos en total, distribuidos entre las dos tablas.
+INSERT INTO deportes (nombre_deporte, categoria)
+VALUES
+    ('Fútbol', 'Equipo'),
+    ('Tenis', 'Individual'),
+    ('Ciclismo', 'Individual'),
+    ('Atletismo', 'Individual'),
+    ('Rugby', 'Equipo')
+
+INSERT INTO eventos (nombre_evento, id_deporte)
+VALUES
+    ('Copa América', 1),
+    ('Chile Open', 2),
+    ('Vuelta a Chile', 3),
+    ('Maratón de Santiago', 4),
+    ('Campeonato Nacional de Rugby', 5);
 
 Modificar un dato en alguna de las tablas (por ejemplo, cambiar el nombre de un deporte o evento).
+UPDATE eventos
+SET nombre_evento = 'Superclásico'
+WHERE nombre_evento = 'Copa América'
+
 
 Modificar la estructura de alguna tabla (por ejemplo, agregar una nueva columna).
+ALTER TABLE deportes
+ADD COLUMN popularidad INTEGER;
 
 Eliminar un dato de alguna tabla.
+DELETE FROM eventos
+WHERE nombre_evento = 'Maratón de Santiago';
 
 Realizar una transacción utilizando BEGIN, COMMIT y ROLLBACK:
 Insertar un nuevo deporte y un nuevo evento.
 Si la inserción falla, revertir los cambios.
+
+BEGIN;
+
+INSERT INTO deportes (nombre_deporte, categoria)
+VALUES ('Surf', 'Individual');
+
+INSERT INTO eventos (nombre_evento, id_deporte)
+VALUES ('Campeonato Nacional de Surf', 6);
+
+COMMIT;
