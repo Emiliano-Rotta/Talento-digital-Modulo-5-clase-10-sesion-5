@@ -114,3 +114,61 @@ REVOKE UPDATE ON productos FROM finanzas;
 \c tienda carlos
 UPDATE productos SET precio = 1350.00 WHERE nombre = 'Laptop';
 -- Debería resultar en un error de permisos
+
+
+---------------------------------------------------------------------------------------------
+Ejercicio 1: Lugares Turísticos en Chile
+
+Crear una base de datos llamada TurismoChile.
+
+Crear dos tablas relacionadas:
+
+lugares_turisticos: para almacenar información sobre lugares turísticos.
+id_lugar (serial, primary key)
+nombre_lugar (varchar(50), NOT NULL)
+ubicacion (varchar(50), NOT NULL)
+tipo (varchar(30), NOT NULL)
+
+actividades: para listar actividades turísticas disponibles en cada lugar.
+id_actividad (serial, primary key)
+nombre_actividad (varchar(50), NOT NULL)
+id_lugar (integer, references lugares_turisticos(id_lugar))
+
+Agregar 5 datos en total, distribuidos entre las dos tablas.
+
+Modificar un dato en alguna de las tablas (puede ser cambiar el nombre de un lugar o actividad).
+
+Modificar la estructura de alguna tabla (por ejemplo, agregar una nueva columna).
+
+Eliminar un dato de alguna tabla.
+
+Realizar una transacción utilizando BEGIN, COMMIT y ROLLBACK:
+Insertar un nuevo lugar y una nueva actividad.
+Si la inserción falla, revertir los cambios.
+
+Ejercicio 2: Deportes en Chile
+
+Crear una base de datos llamada DeportesChile.
+Crear dos tablas relacionadas:
+
+deportes: para almacenar los diferentes deportes practicados en Chile.
+id_deporte (serial, primary key)
+nombre_deporte (varchar(50), NOT NULL)
+categoria (varchar(30), NOT NULL)
+
+eventos: para listar los eventos deportivos en Chile.
+id_evento (serial, primary key)
+nombre_evento (varchar(50), NOT NULL)
+id_deporte (integer, references deportes(id_deporte))
+
+Agregar 5 datos en total, distribuidos entre las dos tablas.
+
+Modificar un dato en alguna de las tablas (por ejemplo, cambiar el nombre de un deporte o evento).
+
+Modificar la estructura de alguna tabla (por ejemplo, agregar una nueva columna).
+
+Eliminar un dato de alguna tabla.
+
+Realizar una transacción utilizando BEGIN, COMMIT y ROLLBACK:
+Insertar un nuevo deporte y un nuevo evento.
+Si la inserción falla, revertir los cambios.
